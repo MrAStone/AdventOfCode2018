@@ -6,7 +6,7 @@ namespace AdventOfCode2018
     {
         static void Main(string[] args)
         {
-            Day2P2();
+            Day3();
         }
         static void Day1()
         {
@@ -136,7 +136,74 @@ namespace AdventOfCode2018
 
 
         }
+        static void Day3()
+        {
+            int gridsize = 10000;
+            string[,] grid = new string[gridsize,gridsize];
+            for(int row = 0; row < gridsize; row++)
+            {
+                for(int col = 0; col < gridsize; col++)
+                {
+                    grid[row, col] = ".";
+                }
+            }
+            StreamReader sr = new StreamReader("day3input.txt");
+            int hashCount = 0;
+            while(!sr.EndOfStream)
+            {
+                string s = sr.ReadLine();
+                string[] spl = s.Split(' ');
+                //for(int i=0; i< spl.Length; i++)
+                //{
+                //    Console.WriteLine(spl[i]);
+                //}
+                //Console.ReadLine();
+                spl[0] = spl[0].Replace("#", "");
+               string claim = spl[0];
+                spl[2] = spl[2].Replace(":", "");
+                string[] gridRef = spl[ 2].Split(',');
+                int x = Convert.ToInt32(gridRef[0]);
 
+                int y = Convert.ToInt32(gridRef[1]);
+              //  Console.WriteLine($"{x} and {y}");
+                string[] gridSize = spl[3].Split("x");
+                int w = Convert.ToInt32(gridSize[0]);
+                int h = Convert.ToInt32(gridSize[1]);
+                
+                for(int i = 0; i < w; i++)
+                {
+                   
+                    for(int j = 0; j < h; j++)
+                    {
+                        if(grid[x + j, y + i]==".")
+                        {
+                            grid[x + j, y + i] = "-";
+                        }
+                        else
+                        {
+                            grid[x + j, y + i] = "X";
+                            hashCount++;
+                        }
+
+                      
+                    }
+                    
+                }
+
+                //for (int i = 0; i < 10000; i++)
+                //{
+                //    for (int j = 0; j < 10000; j++)
+                //    {
+                //        Console.Write(grid[j, i]);
+                        
+                //    }
+                //    Console.WriteLine();
+                //    Console.ReadLine();
+                //}
+
+            }
+            Console.WriteLine($"Overlaps = {hashCount}");
+        }
 
 
     }
