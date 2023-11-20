@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.ComponentModel;
 
 namespace AdventOfCode2018
 {
@@ -138,71 +139,72 @@ namespace AdventOfCode2018
         }
         static void Day3()
         {
-            int gridsize = 10000;
-            string[,] grid = new string[gridsize,gridsize];
-            for(int row = 0; row < gridsize; row++)
-            {
-                for(int col = 0; col < gridsize; col++)
-                {
-                    grid[row, col] = ".";
-                }
-            }
-            StreamReader sr = new StreamReader("day3input.txt");
-            int hashCount = 0;
-            while(!sr.EndOfStream)
-            {
-                string s = sr.ReadLine();
-                string[] spl = s.Split(' ');
-                //for(int i=0; i< spl.Length; i++)
-                //{
-                //    Console.WriteLine(spl[i]);
-                //}
-                //Console.ReadLine();
-                spl[0] = spl[0].Replace("#", "");
-               string claim = spl[0];
-                spl[2] = spl[2].Replace(":", "");
-                string[] gridRef = spl[ 2].Split(',');
-                int x = Convert.ToInt32(gridRef[0]);
+           StreamReader sr = new StreamReader("day3input.txt");
+           
+           // StreamReader sr = new StreamReader("test.txt");
+            Dictionary<(int x, int y), int> grid = new Dictionary<(int x, int y), int>();
 
-                int y = Convert.ToInt32(gridRef[1]);
-              //  Console.WriteLine($"{x} and {y}");
-                string[] gridSize = spl[3].Split("x");
-                int w = Convert.ToInt32(gridSize[0]);
-                int h = Convert.ToInt32(gridSize[1]);
-                
-                for(int i = 0; i < w; i++)
-                {
-                   
-                    for(int j = 0; j < h; j++)
+            Dictionary<(int x, int y), List<int>> claims = new Dictionary<(int x, int y), List<int>>();
+            List<int> ClaimNumbers = new List<int>();
+            while (!sr.EndOfStream)
+            {
+                string line = sr.ReadLine();
+                line = line.Replace(":", "");
+                line = line.Replace("#", "");
+                string[] lSplit = line.Split(' ');
+                int claim = Convert.ToInt32(lSplit[0]);
+                ClaimNumbers.Add(claim);
+                string[] coords = lSplit[2].Split(",");
+                int x = int.Parse(coords[0]);
+                int y = int.Parse(coords[1]);
+                var cord = (x, y);
+                string[] size = lSplit[3].Split("x");
+               
+                int w = int.Parse(size[0]);
+                int h = int.Parse(size[1]);
+
+                for(int i = x;i< x + w; i++){
+                    for (int j = y;j< y + h; j++)
                     {
-                        if(grid[x + j, y + i]==".")
+                        
+                        //Console.WriteLine($"{i}x{j}");
+                        //Console.ReadLine();
+                        cord = (i, j);
+                        if (claims.ContainsKey(cord))
                         {
-                            grid[x + j, y + i] = "-";
+                            claims[cord].Add(claim);
+                            ClaimNumbers.Remove(claim);
+                            for(int c = 0; c < claims[cord].Count; c++)
+                            {
+                                ClaimNumbers.Remove(claims[cord][c]);
+                            }
+
                         }
                         else
                         {
-                            grid[x + j, y + i] = "X";
-                            hashCount++;
+                            claims.Add(cord, new List<int>());
+                            claims[cord].Add(claim);
                         }
-
+                        if (grid.ContainsKey(cord))
+                        {
+                            grid[cord]++;
                       
+                        }
+                        else
+                        {
+                            grid.Add(cord, 1);
+                        }
                     }
-                    
                 }
-
-                //for (int i = 0; i < 10000; i++)
-                //{
-                //    for (int j = 0; j < 10000; j++)
-                //    {
-                //        Console.Write(grid[j, i]);
-                        
-                //    }
-                //    Console.WriteLine();
-                //    Console.ReadLine();
-                //}
+               
 
             }
-            Console.WriteLine($"Overlaps = {hashCount}");
+            int overlaps = 0;
+     for (int i = 0; i<ClaimNumbers.Count; i++)
+            {
+                Console.WriteLine(ClaimNumbers[i]);
+            }
+           
         }
 
 
