@@ -213,8 +213,8 @@ namespace AdventOfCode2018
         }
         static void Day4()
         {
-           StreamReader sr = new StreamReader("test.txt");
-            //  StreamReader sr = new StreamReader("day4Input.txt");
+           //StreamReader sr = new StreamReader("test.txt");
+              StreamReader sr = new StreamReader("day4Input.txt");
             int startTime = 0;
             int endTime = 0;
             Dictionary<DateTime, string> inputs = new Dictionary<DateTime, string>();
@@ -242,7 +242,7 @@ namespace AdventOfCode2018
                 //Console.WriteLine($"{key} {inputs[key]}");
                 string d = key.ToString("yyyy-MM-dd");
                 string details = inputs[key];
-                Console.WriteLine(details);
+             //   Console.WriteLine(details);
 
                 if (details.Contains("Guard"))
                 {
@@ -293,22 +293,50 @@ namespace AdventOfCode2018
                     }
                 }
                 string st = "";
-                Console.WriteLine(st.PadRight(11) + ts);
-                Console.WriteLine(st.PadRight(11) + us);
+             //   Console.WriteLine(st.PadRight(11) + ts);
+             //   Console.WriteLine(st.PadRight(11) + us);
+            int maxSleep = 0;
+            int magGuard = 0;
+            int maxMin = 0;
+            int maxMins = 0;
+            int maxGuard = 0;
+            int maxMinute = 0;
             foreach (KeyValuePair < int,int[]> gd in guardData)
             {
                 int gsum = 0;
-                Console.Write($"{gd.Key.ToString().PadRight(10)} ");
+           //     Console.Write($"{gd.Key.ToString().PadRight(10)} ");
                 for (int i = 0;i<60; i++)
                 {
-                    Console.Write($"{gd.Value[i]}");
-                    gsum++;
+                 //   Console.Write($"{gd.Value[i]}");
+                    gsum += gd.Value[i];
                 }
-          Console.WriteLine();
-                Console.WriteLine(gsum) ;
-                Console.WriteLine(gd.Value.Max());
+               // Console.WriteLine();
+                int[] a = gd.Value;
+                
+               if (a.Max() > maxMins)
+                {
+                    maxMins = a.Max();
+                    maxGuard = gd.Key;
+                    maxMinute = Array.IndexOf(a, maxMins);
+                }
+                if (gsum > maxSleep)
+                {
+                    magGuard = gd.Key;
+                    maxSleep = gsum;
+                    
+                    maxMin = Array.IndexOf(a, a.Max());
+
+                }
             }
-            
+            Console.WriteLine($"The guard who slept the most is {magGuard} and most minute was {maxMin}");
+            Console.WriteLine(magGuard * maxMin);
+            // Console.WriteLine($"Part 2 is {answer}");
+            Console.WriteLine($"{maxGuard} was asleep the most at minute {maxMinute} for a total of {maxGuard * maxMinute}");
+
+        }
+        stativ void Day5()
+        {
+
         }
 
     }
